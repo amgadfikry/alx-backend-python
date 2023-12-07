@@ -4,8 +4,21 @@ from typing import Mapping, Any, Union, TypeVar
 
 
 T = TypeVar('T')
-def safely_get_value(dct: Mapping, key: Any, default: Union[T, None] = None) -> Union[Any, T]:
-    """ type-annotated function """
+
+
+def safely_get_value(dct: Mapping, key: Any,
+                     default: Union[T, None] = None) -> Union[Any, T]:
+    """ safely_get_value - takes a dict dct, a key and an optional default
+        argument and returns the value linked to key if it exists,
+        otherwise returns default
+    Args:
+        dct (Mapping): dict
+        key (Any): key
+        default (Union[T, None], optional): default value. Defaults to None.
+    Returns:
+        Union[Any, T]: value linked to key if it exists, otherwise returns
+                       default
+    """
     if key in dct:
         return dct[key]
     else:
