@@ -10,4 +10,4 @@ async def wait_n(n: int, max_delay: int) -> list[float]:
     """ function return lit of awaited function result """
     li = [wait_random(max_delay) for _ in range(0, n)]
     waiting = await asyncio.gather(*li)
-    return sorted(waiting)
+    return waiting
