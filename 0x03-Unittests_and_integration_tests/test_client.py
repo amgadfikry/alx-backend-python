@@ -23,6 +23,7 @@ class TestGithubOrgClient(unittest.TestCase):
         call_class: GithubOrgClient = GithubOrgClient(name)
         result: Dict = call_class.org()
         mock_get.assert_called_once_with(call_class.ORG_URL.format(org=name))
+        mock_res.assert_called_once()
         self.assertEqual(result, load)
 
 
