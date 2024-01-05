@@ -32,7 +32,7 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(result, 'pla')
 
     @patch('client.get_json')
-    def test_public_repos(self, mock_get: Mock):
+    def test_public_repos(self, mock_get: Mock) -> None:
         """ test public repos attribute"""
         test_class: GithubOrgClient = GithubOrgClient('pla')
         mock_get.return_value = [{'name': 'a', 'license': None}]
