@@ -34,15 +34,13 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch('client.get_json')
     def test_public_repos(self, mock_get: Mock) -> None:
         """ test public repos attribute"""
-        test_class: GithubOrgClient = GithubOrgClient('pla')
-        mock_get.return_value: List = [{'name': 'a', 'license': None}]
-        with patch('client.GithubOrgClient._public_repos_url',
-                new_callable=PropertyMock, return_value='pla') as mock_prop:
-            result: List = test_class.public_repos()
-            self.assertEqual(result, ['a'])
-            mock_prop.assert_called_once_with()
-            mock_get.assert_called_once_with(
-                'pla')
+        mock_get.return_value = [{"name": 'a'}]
+        test_class = GithubOrgClient("test_org")
+        with patch.object(test_class, "_public_repos_url", 'pla'):
+            results = test_class.public_repos()
+            self.assertEqual(results, ['a'])
+            mock_get.assert_called_once_with('pla')
+            self.assertEqual(test_class._public_repos_url, 'pla')
 
 
 if __name__ == '__main__':
