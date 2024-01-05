@@ -3,7 +3,7 @@
 import unittest
 from parameterized import parameterized
 from utils import access_nested_map
-from typing import Sequence, Mapping, Any
+from typing import Sequence, Mapping, Any, Type
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -21,6 +21,17 @@ class TestAccessNestedMap(unittest.TestCase):
         """
         function_res: Any = access_nested_map(nested_map, path)
         self.assertEqual(function_res, res)
+
+    @parameterized.expand([
+        ({}, ("a",), KeyError),
+        ({"a": 1}, ("a", "b"), KeyError)
+    ])
+    def test_access_nested_map_exception(
+            self, nested_map: Mapping, path: Sequence,
+            excp: Type[BaseException]) -> None:
+        """ method to test access nested map function exception"""
+        with self.assertRaises(excp):
+            access_nested_map(nested_map, path)
 
 
 if __name__ == '__main__':
