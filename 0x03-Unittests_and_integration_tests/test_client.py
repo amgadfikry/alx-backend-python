@@ -35,12 +35,14 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_public_repos(self, mock_get: Mock) -> None:
         """ test public repos attribute"""
         mock_get.return_value: List = [{'name': 'a', 'license': None}]
-        with patch('client.GithubOrgClient._public_repos_url') as mock_url:
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_url:
             mock_url.return_value: str = 'pla'
             test_class: GithubOrgClient = GithubOrgClient('pla')
             result: List = test_class.public_repos()
-            mock_get.assert_called_once_with(mock_url)
+            mock_url.assert_called_once()
             self.assertEqual(result, ['a'])
+        mock_get.assert_called_once()
 
     @parameterized.expand([
         ({"license": {"key": "my_license"}}, "my_license", True),
