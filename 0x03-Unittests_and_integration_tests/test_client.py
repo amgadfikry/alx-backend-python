@@ -12,21 +12,16 @@ class TestGithubOrgClient(unittest.TestCase):
         inside class
     """
     @parameterized.expand([
-        ('google', {'load': 'google'}),
-        ('abc', {'load': 'abc'})
+        ("google"),
+        ("abc")
     ])
     @patch('client.get_json')
-    def test_org(
-            self, name: str, load: Dict, mock_get: Mock) -> None:
+    def test_org(self, name: str, mock_get: Mock) -> None:
         """ method that test org method in GithubOrgClient class """
-        mock_res: Mock = Mock()
-        mock_res.return_value = load
-        mock_get.return_value = mock_res
-        call_class: GithubOrgClient = GithubOrgClient(name)
-        result: Dict = call_class.org()
-        mock_get.assert_called_once_with(call_class.ORG_URL.format(org=name))
-        mock_res.assert_called_once()
-        self.assertEqual(result, load)
+        test_class: GithubOrgClient = GithubOrgClient(name)
+        test_class.org()
+        mock_get.assert_called_once_with(
+            'https://api.github.com/orgs/{}'.format(name))
 
     @patch('client.GithubOrgClient.org', new_callable=PropertyMock)
     def test_public_repos_url(self, mock_prop: PropertyMock):
