@@ -34,9 +34,9 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch('client.get_json')
     def test_public_repos(self, mock_get: Mock) -> None:
         """ test public repos attribute"""
-        mock_get.return_value: Dict = [{'name': 'a', 'license': None}]
+        mock_get.return_value: List = [{'name': 'a', 'license': None}]
         with patch('client.GithubOrgClient._public_repos_url') as mock_url:
-            mock_url.return_value = 'pla'
+            mock_url.return_value: str = 'pla'
             test_class: GithubOrgClient = GithubOrgClient('pla')
             result: List = test_class.public_repos()
             mock_get.assert_called_once_with(mock_url)
