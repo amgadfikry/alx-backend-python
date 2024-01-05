@@ -2,7 +2,7 @@
 """ module to test utils file functions """
 import unittest
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from typing import Sequence, Mapping, Any, Type, Dict
 from unittest.mock import patch, Mock
 
@@ -55,6 +55,29 @@ class TestGetJson(unittest.TestCase):
         mock_get.assert_called_once_with(url)
         mock_res.json.assert_called_once()
         self.assertEqual(result, load)
+
+
+class TestMemoize(unittest.TestCase):
+    """ class of unittest to test memoize
+        function of utlis module
+    """
+    def test_memoize(self):
+        """ method test memoize function"""
+        class TestClass:
+            """ class to test memorization with mock"""
+            def a_method(self) -> int:
+                """ method that return number """
+                return 42
+
+            @memoize
+            def a_property(self) -> int:
+                """ method call function of a_method """
+                return self.a_method()
+        with patch.object(TestClass, 'a_method') as mock_method:
+            call_class: TestClass = TestClass()
+            call_class.a_property()
+            call_class.a_property()
+        mock_method.assert_called_once()
 
 
 if __name__ == '__main__':
