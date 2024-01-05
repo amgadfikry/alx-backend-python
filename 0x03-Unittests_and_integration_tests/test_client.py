@@ -2,28 +2,31 @@
 """ unittest of client module functions """
 import unittest
 from typing import Dict
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, Mock
 from parameterized import parameterized
 from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """Tests the `GithubOrgClient` class."""
+    """ class to test client functions
+        inside class
+    """
     @parameterized.expand([
-        ("google", {'login': "google"}),
-        ("abc", {'login': "abc"}),
+        ('google', {'load': 'google'}),
+        ('abc', {'load': 'abc'})
     ])
-    @patch(
-        "client.get_json",
-    )
-    def test_org(self, org: str, resp: Dict, mocked_fxn: MagicMock) -> None:
-        """Tests the `org` method."""
-        mocked_fxn.return_value = MagicMock(return_value=resp)
-        gh_org_client = GithubOrgClient(org)
-        self.assertEqual(gh_org_client.org(), resp)
-        mocked_fxn.assert_called_once_with(
-            "https://api.github.com/orgs/{}".format(org)
-        )
+    @patch('client.get_json')
+    def test_org(
+            self, name: str, load: Dict, mock_get: Mock) -> None:
+        """ method that test org method in GithubOrgClient class """
+        mock_res: Mock = Mock()
+        mock_res.return_value = load
+        mock_get.return_value = mock_res
+        call_class: GithubOrgClient = GithubOrgClient(name)
+        result: Dict = call_class.org()
+        mock_get.assert_called_once_with(call_class.ORG_URL.format(org=name))
+        mock_res.assert_called_once()
+        self.assertEqual(result, load)
 
 
 if __name__ == '__main__':
