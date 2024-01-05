@@ -36,7 +36,7 @@ class TestGithubOrgClient(unittest.TestCase):
         """ test public repos attribute"""
         mock_get.return_value: Dict = [{'name': 'a', 'license': None}]
         test_class: GithubOrgClient = GithubOrgClient('pla')
-        with patch('GithubOrgClient._public_repos_url') as mock_url:
+        with patch('client.GithubOrgClient._public_repos_url') as mock_url:
             mock_url.return_value: str = 'pla'
             result: List = test_class.public_repos()
             self.assertEqual(result, ['a'])
