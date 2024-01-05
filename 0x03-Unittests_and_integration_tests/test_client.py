@@ -21,9 +21,8 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_res.json.return_value = load
         mock_get.return_value = mock_res
         call_class: GithubOrgClient = GithubOrgClient(name)
-        result = call_class.org()
+        result: Mock = call_class.org()
         mock_get.assert_called_once_with(call_class.ORG_URL.format(org=name))
-
 
 if __name__ == '__main__':
     unittest.main()
