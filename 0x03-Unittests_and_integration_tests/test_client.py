@@ -31,15 +31,15 @@ class TestGithubOrgClient(unittest.TestCase):
         result: str = call_class._public_repos_url
         self.assertEqual(result, 'pla')
 
+    @patch('client.GithubOrgClient._public_repos_url', new_callable=PropertyMock)
     @patch('client.get_json')
-    def test_public_repos(self, mock_get: Mock) -> None:
-        """ test public repos attribute"""
-        test_class: GithubOrgClient = GithubOrgClient('pla')
-        mock_get.return_value: List = [{'name': 'a', 'license': None}]
-        with patch('client.GithubOrgClient._public_repos_url', return_value='pla') as mock_url:
-            result: List = test_class.public_repos()
-            mock_get.assert_called_once_with(mock_url)
-            self.assertEqual(result, ['a'])
+    def test_repos_payload(self, mock_get: Mock, mock_prop: PropertyMock):
+        """ test method repos payload """
+        mock_prop.return_value = 'pla'
+        mock_get.return_value = {'repos_url': 'pla'}
+        call_class: GithubOrgClient = GithubOrgClient("pla")
+        result: str = call_class.repos_payload
+        self.assertEqual(result, 'pla')
 
 
 if __name__ == '__main__':
