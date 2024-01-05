@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """ module to test utils file functions """
-from unittest import TestCase
+import unittest
 from parameterized import parameterized
 from utils import access_nested_map
 from typing import Sequence, Mapping, Any
 
 
-class TestAccessNestedMap(TestCase):
+class TestAccessNestedMap(unittest.TestCase):
     """class of unittest to test all function of utlis module """
 
     @parameterized.expand([
@@ -21,3 +21,7 @@ class TestAccessNestedMap(TestCase):
         """
         function_res: Any = access_nested_map(nested_map, path)
         self.assertEqual(function_res, res)
+
+
+if __name__ == '__main__':
+    unittest.main()
