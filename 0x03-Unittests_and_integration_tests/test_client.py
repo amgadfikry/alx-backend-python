@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ unittest of client module functions """
 import unittest
-from typing import Dict
+from typing import Dict, List
 from unittest.mock import patch, Mock, PropertyMock
 from parameterized import parameterized
 from client import GithubOrgClient
@@ -30,6 +30,17 @@ class TestGithubOrgClient(unittest.TestCase):
         call_class: GithubOrgClient = GithubOrgClient("pla")
         result: str = call_class._public_repos_url
         self.assertEqual(result, 'pla')
+
+    @patch('client.get_json')
+    def test_public_repos(self, mock_get: Mock):
+        """ test public repos attribute"""
+        test_class: GithubOrgClient = GithubOrgClient('pla')
+        mock_get.return_value = [{'name': 'a', 'license': None}]
+        with patch('client.GithubOrgClient._public_repos_url') as mock_url:
+            mock_url.return_value = 'pla'
+            result: List = test_class.public_repos()
+        mock_get.assert_called_once_with(mock_url)
+        self.assertEqual(result, ['a'])
 
 
 if __name__ == '__main__':
