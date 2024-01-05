@@ -39,7 +39,7 @@ class TestGithubOrgClient(unittest.TestCase):
         with patch('client.GithubOrgClient._public_repos_url') as mock_url:
             mock_url.return_value = 'pla'
             result: List = test_class.public_repos()
-        mock_get.assert_called_once_with(mock_url)
+            mock_get.assert_called_once_with(mock_url)
         self.assertEqual(result, ['a'])
 
 
