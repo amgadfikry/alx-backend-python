@@ -17,10 +17,10 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_org(
             self, name: str, load: Dict, mock_get: Mock) -> None:
         """ method that test org method in GithubOrgClient class """
-        mock_res: Mock = Mock()
+        mock_res = Mock()
         mock_res.return_value = load
         mock_get.return_value = mock_res
-        call_class: GithubOrgClient = GithubOrgClient(name)
+        call_class = GithubOrgClient(name)
         result = call_class.org()
         mock_get.assert_called_once_with(call_class.ORG_URL.format(org=name))
         self.assertEqual(result, load)
