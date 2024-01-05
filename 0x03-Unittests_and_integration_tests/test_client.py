@@ -8,7 +8,9 @@ from client import GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """ class to test client functions """
+    """ class to test client methods
+        inside class
+    """
     @parameterized.expand([
         ('google', {'load': 'google'}),
         ('abc', {'load': 'abc'})
