@@ -10,17 +10,19 @@ from client import GithubOrgClient
 class TestGithubOrgClient(unittest.TestCase):
     """Tests the `GithubOrgClient` class."""
     @parameterized.expand([
-        ('google', {'load': 'google'}),
-        ('abc', {'load': 'abc'})
+        ("google", {'login': "google"}),
+        ("abc", {'login': "abc"}),
     ])
-    @patch('client.get_json')
-    def test_org(self, name: str, load: Dict, mock_get: MagicMock) -> None:
+    @patch(
+        "client.get_json",
+    )
+    def test_org(self, org: str, resp: Dict, mocked_fxn: MagicMock) -> None:
         """Tests the `org` method."""
-        mock_get.return_value = MagicMock(return_value=load)
-        gh_org_client = GithubOrgClient(name)
-        self.assertEqual(gh_org_client.org(), load)
-        mock_get.assert_called_once_with(
-            "https://api.github.com/orgs/{}".format(name)
+        mocked_fxn.return_value = MagicMock(return_value=resp)
+        gh_org_client = GithubOrgClient(org)
+        self.assertEqual(gh_org_client.org(), resp)
+        mocked_fxn.assert_called_once_with(
+            "https://api.github.com/orgs/{}".format(org)
         )
 
 
