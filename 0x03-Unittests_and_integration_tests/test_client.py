@@ -55,6 +55,7 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_func.return_value = expected
         result: bool = mock_func(repo, key)
         self.assertEqual(result, expected)
+        mock_func.assert_called_once_with(repo, key)
 
 
 @parameterized_class(
