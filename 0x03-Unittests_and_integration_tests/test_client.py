@@ -70,8 +70,20 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.get_patcher = patch('requests.get')
         cls.mock_get = cls.get_patcher.start()
         cls.mock_get.side_effect = [
-            cls.org_payload, cls.repos_payload,
+            Mock(json=Mock(return_value=cls.org_payload)),
+            Mock(json=Mock(return_value=cls.repos_payload)),
         ]
+        cls.test_class = GithubOrgClient('pla')
+
+    def test_public_repos(self):
+        """ test public repo method """
+        result = self.test_class.public_repos()
+        self.assertEqual(result, self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """ test public repo method with check license """
+        result = self.test_class.public_repos(license="apache-2.0")
+        self.assertEqual(result, self.apache2_repos)
 
     @classmethod
     def tearDownClass(cls) -> None:
