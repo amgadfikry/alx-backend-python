@@ -76,32 +76,12 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.test_class = GithubOrgClient('pla')
 
     def test_public_repos(self) -> None:
-        """
-        Test case for the 'public_repos' method in the GithubOrgClient class.
-        This test aims to verify that the 'public_repos' method returns
-        the expected list of public repositories.
-        Test Steps:
-        1. Call the 'public_repos' method on the test instance.
-        2. Retrieve the result, which is expected to be a list of public repo.
-        3. Assert that the result matches the expected list of repositories.
-        """
+        """ test public repo method """
         result: List = self.test_class.public_repos()
         self.assertEqual(result, self.expected_repos)
 
     def test_public_repos_with_license(self) -> None:
-        """
-        Test case for the 'public_repos' method with license filtering
-        in the GithubOrgClient class.
-        This test verifies that the 'public_repos' method correctly
-        filters repositories based on a specified license.
-        Test Steps:
-        1. Call the 'public_repos' method on the test instance,
-        providing the license as a parameter.
-        2. Retrieve the result, which is expected to be a list of
-        public repositories with the specified license.
-        3. Assert that the result matches the expected list of
-        repositories with the specified license.
-        """
+        """ test public repo method with check license """
         result: List = self.test_class.public_repos("apache-2.0")
         self.assertEqual(result, self.apache2_repos)
 
