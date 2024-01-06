@@ -17,7 +17,7 @@ class TestGithubOrgClient(unittest.TestCase):
         ("abc")
     ])
     @patch('client.get_json')
-    def test_org(self, name: str, mock_get: Mock):
+    def test_org(self, name: str, mock_get: Mock) -> None:
         """ method that test org method in GithubOrgClient class """
         test_class: GithubOrgClient = GithubOrgClient(name)
         test_class.org()
@@ -36,7 +36,8 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_public_repos(self, mock_get: Mock) -> None:
         """ test public repos attribute"""
         mock_get.return_value: List = [{'name': 'a', 'license': None}]
-        with patch('client.GithubOrgClient._public_repos_url', new_callable=PropertyMock) as mock_url:
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_url:
             mock_url.return_value: str = 'pla'
             test_class: GithubOrgClient = GithubOrgClient('pla')
             result: List = test_class.public_repos()
