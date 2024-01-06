@@ -3,8 +3,9 @@
 import unittest
 from typing import Dict, List, Mapping
 from unittest.mock import patch, Mock, PropertyMock
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -48,11 +49,31 @@ class TestGithubOrgClient(unittest.TestCase):
         ({"license": {"key": "my_license"}}, "my_license", True),
         ({"license": {"key": "other_license"}}, "my_license", False)
     ])
-    def test_has_license(self, repo: Mapping, key: str, expected: bool) -> None:
+    def test_has_license(
+            self, repo: Mapping, key: str, expected: bool) -> None:
         """ test has license method """
         test_class: GithubOrgClient = GithubOrgClient("google")
         result: bool = test_class.has_license(repo, key)
         self.assertEqual(result, expected)
+
+
+@parameterized_class(
+    ('org_payload', 'repos_payload', 'expected_repos', 'apache2_repos'),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ integration test for whole class in client file """
+    @classmethod
+    def setUpClass(cls) -> None:
+        """set up all requirements needed fot tests"""
+        cls.get_patcher = patch('client.requests.get')
+        cls.get_patcher.start()
+        cls.mock_get = Mock(side_effect=cls.repos_payload)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """ tear down all setups in first of test """
+        cls.get_patcher.stop()
 
 
 if __name__ == '__main__':
