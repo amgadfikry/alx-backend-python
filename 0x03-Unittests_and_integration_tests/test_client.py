@@ -17,7 +17,7 @@ class TestGithubOrgClient(unittest.TestCase):
         ("abc")
     ])
     @patch('client.get_json')
-    def test_org(self, name: str, mock_get: Mock) -> None:
+    def test_org(self, name: str, mock_get: Mock):
         """ method that test org method in GithubOrgClient class """
         test_class: GithubOrgClient = GithubOrgClient(name)
         test_class.org()
@@ -33,7 +33,7 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(result, 'pla')
 
     @patch('client.get_json')
-    def test_public_repos(self, mock_get: Mock) -> None:
+    def test_public_repos(self, mock_get: Mock):
         """ test public repos attribute"""
         mock_get.return_value: List = [{'name': 'a', 'license': None}]
         with patch('client.GithubOrgClient._public_repos_url',
@@ -65,7 +65,7 @@ class TestGithubOrgClient(unittest.TestCase):
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """ integration test for whole class in client file """
     @classmethod
-    def setUpClass(cls) -> None:
+    def setUpClass(cls):
         """set up all requirements needed fot tests"""
         cls.get_patcher = patch('requests.get')
         cls.mock_get = cls.get_patcher.start()
@@ -75,18 +75,18 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         ]
         cls.test_class = GithubOrgClient('pla')
 
-    def test_public_repos(self) -> None:
+    def test_public_repos(self):
         """ test public repo method """
         result: List = self.test_class.public_repos()
         self.assertEqual(result, self.expected_repos)
 
-    def test_public_repos_with_license(self) -> None:
+    def test_public_repos_with_license(self):
         """ test public repo method with check license """
         result: List = self.test_class.public_repos("apache-2.0")
         self.assertEqual(result, self.apache2_repos)
 
     @classmethod
-    def tearDownClass(cls) -> None:
+    def tearDownClass(cls):
         """ tear down all setups in first of test """
         cls.get_patcher.stop()
 
