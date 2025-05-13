@@ -35,3 +35,20 @@ In `0-stream_users.py` write a function that uses a generator to fetch rows one 
 
 - Prototype: `def stream_users()`
 - Your function should have no more than 1 loop
+
+## 2. Batch processing Large Data
+
+### Objective
+
+Create a generator to fetch and process data in batches from the users database
+
+### Instructions
+
+1. Write a function stream_users_in_batches(batch_size) that fetches rows in batches
+
+2. Write a function batch_processing() that processes each batch to filter users over the age of25`
+
+3. You must use no more than 3 loops in your code. Your script must use the yield generator
+
+    - def stream_users_in_batches(batch_size)
+    - def batch_processing(batch_size)
