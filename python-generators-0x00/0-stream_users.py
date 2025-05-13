@@ -2,17 +2,24 @@
 import mysql.connector
 
 
-def stream_users(connection):
+def stream_users():
     """Generator connecting to the database and yielding rows from the users table.
-    Args:
-        connection (mysql.connector.connection.MySQLConnection): Connection object to the MySQL database.
     Yields:
         tuple: A row from the users table.
     Raises:
-        mysql.connector.Error: If there is an error executing the query.
+        mysql.connector.Error: If there is an error connecting to the database or executing the query.
+    Finally:
+        Closes the cursor and database connection.
     """
     try:
-        cursor = connection.cursor()
+        db = mysql.connector.connect(
+            host="localhost",
+            port=3306,
+            user="root",
+            password="root",
+            database="ALX_prodev",
+        )
+        cursor = db.cursor()
         cursor.execute("SELECT * FROM user_data")
         for row in cursor:
             yield row
@@ -20,4 +27,4 @@ def stream_users(connection):
         print(f"Error: {err}")
     finally:
         cursor.close()
-        connection.close()
+        db.close()
