@@ -65,12 +65,9 @@ def insert_data(connection, data):
         with open(data, 'r') as file:
             csv_reader = csv.reader(file)
             row = next(csv_reader)
-            while row:
-                row = next(csv_reader)
+            for row in csv_reader:
                 cursor.execute(insert_query, row)
         connection.commit()
         print("Data inserted successfully")
     except mysql.connector.Error as err:
         print(f"Error: {err}")
-    finally:
-        cursor.close()
