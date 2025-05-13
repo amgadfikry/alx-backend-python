@@ -22,3 +22,16 @@ Write a python script that `seed.py`:
     - `def connect_to_prodev()` connects the the `ALX_prodev` database in MYSQL
     - `def create_table(connection)`:- creates a table user_data if it does not exists with the required fields
     - `def insert_data(connection, data)`:- inserts data in the database if it does not exist
+
+## 1. generator that streams rows from an SQL database
+
+### Objective
+
+create a generator that streams rows from an SQL database one by one
+
+### Instructions
+
+In `0-stream_users.py` write a function that uses a generator to fetch rows one by one from the `user_data` table. You must use the `Yield` python generator
+
+- Prototype: `def stream_users()`
+- Your function should have no more than 1 loop
