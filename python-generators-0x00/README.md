@@ -52,3 +52,36 @@ Create a generator to fetch and process data in batches from the users database
 
     - def stream_users_in_batches(batch_size)
     - def batch_processing(batch_size)
+
+## 4. Lazy loading Paginated Data
+
+### Objective
+
+Simulte fetching paginated data from the users database using a generator to lazily load each page
+
+### Instructions
+
+- Implement a generator function lazypaginate(pagesize) that implements the paginate_users(page_size, offset) that will only fetch the next page when needed at an offset of 0.
+
+    1. You must only use one loop
+    2. Include the paginate_users function in your code
+    3. You must use the yield generator
+    4. Prototype: def lazy_paginate(page_size)
+
+## 4. Memory-Efficient Aggregation with Generators
+
+### Objective
+
+to use a generator to compute a memory-efficient aggregate function i.e average age for a large dataset
+
+### Instructions
+
+- Implement a generator stream_user_ages() that yields user ages one by one.
+
+- Use the generator in a different function to calculate the average age without loading the entire dataset into memory
+
+- Your script should print Average age of users: average age
+
+- You must use no more than two loops in your script
+
+- You are not allowed to use the SQL AVERAGE
