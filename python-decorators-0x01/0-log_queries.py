@@ -1,14 +1,10 @@
-#!/usr/bin/env python3
+import sqlite3
 import functools
 from datetime import datetime
-import sqlite3
 
 
+#### decorator to lof SQL queries
 def log_queries(func):
-    """
-    Decorator to log SQL queries executed by the function.
-    This decorator wraps the function and prints the SQL query
-    """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         connection = sqlite3.connect('example.db')
@@ -19,3 +15,16 @@ def log_queries(func):
             print("[SQL LOG] No SQL query found")
         return func(*args, **kwargs)
     return wrapper
+
+
+@log_queries
+def fetch_all_users(query):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute(query)
+    results = cursor.fetchall()
+    conn.close()
+    return results
+
+#### fetch users while logging the query
+users = fetch_all_users(query="SELECT * FROM users")
