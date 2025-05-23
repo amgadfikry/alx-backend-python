@@ -9,11 +9,11 @@ class ExecuteQuery:
         self.results = None
 
     def __enter__(self):
-        self.conn = sqlite3.connect("example.db")
+        self.conn = sqlite3.connect("link.db")
         self.cursor = self.conn.cursor()
         self.cursor.execute(self.query, self.params)
         self.results = self.cursor.fetchall()
-        return self.results  # This will be assigned to `results` in the `with` block
+        return self.results 
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.cursor:
