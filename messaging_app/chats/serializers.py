@@ -19,13 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 # Message Serializer
 class MessageSerializer(serializers.ModelSerializer):
-    """
-    Serializer for Message model.
-    Includes nested sender information.
-    """
-    sender = UserSerializer(read_only=True)  # show sender as nested object
-    sender_id = serializers.UUIDField(write_only=True)  # allow sender_id input during creation
-    conversation_id = serializers.UUIDField(write_only=True)  # allow linking to conversation
+    sender = UserSerializer(read_only=True)
+    sender_id = serializers.UUIDField(write_only=True)
+    conversation_id = serializers.UUIDField(write_only=True)
+    message_body = serializers.CharField()
 
     class Meta:
         model = Message
@@ -40,20 +37,20 @@ class MessageSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['message_id', 'sent_at', 'created_at']
 
+    def validate_message_body(self, value):
+        if len(value.strip()) == 0:
+            raise serializers.ValidationError("Message cannot be empty or whitespace.")
+        return value
+
 
 #  Conversation Serializer
 class ConversationSerializer(serializers.ModelSerializer):
-    """
-    Serializer for Conversation model.
-    Includes nested users and all related messages.
-    """
     participants = UserSerializer(many=True, read_only=True)
     participant_ids = serializers.ListField(
-        child=serializers.UUIDField(), write_only=True,
-        required=False,
-        help_text="List of user UUIDs to add as participants"
+        child=serializers.UUIDField(), write_only=True, required=False
     )
     messages = MessageSerializer(many=True, read_only=True)
+    total_messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -61,17 +58,19 @@ class ConversationSerializer(serializers.ModelSerializer):
             'conversation_id',
             'participants',
             'participant_ids',
-            'messages'
+            'messages',
+            'total_messages'  # new field
         ]
         read_only_fields = ['conversation_id']
 
+    def get_total_messages(self, obj):
+        return obj.messages.count()
+
     def create(self, validated_data):
-        """
-        Custom creation logic to handle ManyToManyField (participants).
-        """
         participant_ids = validated_data.pop('participant_ids', [])
         conversation = Conversation.objects.create(**validated_data)
         if participant_ids:
             users = User.objects.filter(user_id__in=participant_ids)
             conversation.participants.set(users)
         return conversation
+
