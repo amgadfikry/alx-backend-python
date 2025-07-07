@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# reference: rest_framework.pagination.PageNumberPagination
 
 # Application definition
 
