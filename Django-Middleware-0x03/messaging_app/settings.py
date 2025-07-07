@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'Django-Middleware-0x03.chats.middleware.RequestLoggingMiddleware',
     'Django-Middleware-0x03.chats.middleware.RestrictAccessByTimeMiddleware',
+    'Django-Middleware-0x03.chats.middleware.OffensiveLanguageMiddleware',
 ]
 
 ROOT_URLCONF = 'messaging_app.urls'
