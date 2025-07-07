@@ -1,22 +1,4 @@
 # Python
 __pycache__/
-*.py[cod]
-*.sqlite3
-*.env
-.env
 venv/
-*.pyc
 
-# Django
-*.db
-/staticfiles/
-/media/
-/*.sqlite3
-
-# IDEs
-.vscode/
-.idea/
-
-# Migrations
-**/migrations/*.pyc
-**/migrations/__pycache__/
