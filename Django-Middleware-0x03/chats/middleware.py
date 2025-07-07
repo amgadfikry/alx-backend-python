@@ -73,3 +73,18 @@ class OffensiveLanguageMiddleware:
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip
+
+class RolepermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Only check for authenticated users
+        user = request.user
+        if user.is_authenticated:
+            # Assume user has a `role` field
+            user_role = getattr(user, 'role', None)
+            if user_role not in ['admin', 'moderator']:
+                return HttpResponseForbidden("Access denied: Admins and Moderators only.")
+        
+        return self.get_response(request)
