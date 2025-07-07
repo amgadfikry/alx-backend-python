@@ -1,34 +1,40 @@
-# Create your views here.
 from rest_framework import viewsets, permissions, status, filters
+from rest_framework.response import Response
 from .models import Conversation, Message
 from .serializers import ConversationSerializer, MessageSerializer
+from .permissions import IsParticipantOfConversation
+from rest_framework.permissions import IsAuthenticated
 
 
-# ViewSet for Conversations
-class ConversationViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for listing and creating conversations.
-    """
-    queryset = Conversation.objects.all().prefetch_related('participants', 'messages')
-    serializer_class = ConversationSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        # You could auto-include the request.user as a participant if needed
-        serializer.save()
-
-
-# ViewSet for Messages
 class MessageViewSet(viewsets.ModelViewSet):
     """
     API endpoint for sending and listing messages.
     """
-    queryset = Message.objects.all().select_related('sender', 'conversation')
     serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsParticipantOfConversation]
     filter_backends = [filters.SearchFilter]
     search_fields = ['message_body']
 
+    def get_queryset(self):
+        conversation_id = self.kwargs.get("conversation_id")
+        if not conversation_id:
+            return Message.objects.none()
+
+        queryset = Message.objects.filter(conversation__id=conversation_id)
+
+        if not queryset.exists():
+            return Message.objects.none()
+
+        # Enforce participant-only access
+        if self.request.user not in queryset.first().conversation.participants.all():
+            return Message.objects.none()
+
+        return queryset
+
     def perform_create(self, serializer):
-        # Automatically set sender from the current logged-in user
+        conversation = serializer.validated_data.get('conversation')
+
+        if self.request.user not in conversation.participants.all():
+            return Response({'detail': 'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
         serializer.save(sender=self.request.user)
