@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+echo "🚀 Starting Minikube cluster..."
+minikube start
+
+echo "✅ Verifying that the Kubernetes cluster is running..."
+kubectl cluster-info
+
+echo "⏳ Waiting for all system pods to be ready..."
+kubectl wait --for=condition=Ready pods --all --all-namespaces --timeout=120s || echo "⚠️ Some pods might not be ready yet."
+
+echo "📦 Retrieving available pods in all namespaces..."
+kubectl get pods --all-namespaces
