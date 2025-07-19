@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+kubectl rollout status deployment/django-blue
+
+while true; do
+    curl --silent http://$(minikube ip) > /dev/null
+    if [ $? -ne 0 ]; then
+        echo "Request failed downtime!"
+    else
+        echo "App is responding"
+    fi
+    sleep 1
+done &
+CURL_PID=$!
+
+kill $CURL_PID
+
+kubectl get pods -l app=django,version=blue
