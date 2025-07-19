@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Name of your deployment and service
+DEPLOYMENT_NAME="django-messaging"
+SERVICE_NAME="django-service"
+NAMESPACE="default"
+PORT=8000
+
+kubectl scale deployment "$DEPLOYMENT_NAME" --replicas=3
+
+kubectl wait --for=condition=available --timeout=60s deployment/"$DEPLOYMENT_NAME"
+
+kubectl get pods -l app=django-messaging
+
+kubectl port-forward svc/"$SERVICE_NAME" $PORT:80 > /dev/null 2>&1 &
+PF_PID=$!
+
+sleep 3
+
+wrk -t2 -c20 -d10s http://localhost:$PORT/
+
+kubectl top pods
+
+kill $PF_PID
