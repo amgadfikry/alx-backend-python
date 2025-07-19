@@ -1,0 +1,12 @@
+#!/bin/bash
+
+kubectl apply -f blue_deployment.yaml
+
+kubectl apply -f green_deployment.yaml
+
+kubectl get pods -l version=green
+
+for pod in $(kubectl get pods -l version=green -o name); do
+    kubectl logs $pod
+done
+

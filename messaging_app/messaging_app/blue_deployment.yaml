@@ -1,20 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: django-messaging
+  name: django-blue
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: django-messaging
+      version: blue
   template:
     metadata:
       labels:
         app: django-messaging
+        version: blue
     spec:
       containers:
         - name: django
-          image: django-messaging:latest
+          image: django-messaging:blue
           ports:
             - containerPort: 8000
 
@@ -26,8 +28,10 @@ metadata:
 spec:
   selector:
     app: django-messaging
+    version: blue
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8000
   type: ClusterIP
+
